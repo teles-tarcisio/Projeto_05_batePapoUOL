@@ -1,5 +1,6 @@
 * {
     box-sizing: border-box;
+    /*  CSS rule to use font family:    */
     font-family: 'Roboto', sans-serif;    
 }
 
@@ -7,5 +8,38 @@ body {
     background-color: #eef9bf;
 }
 
-/*  CSS rule to use font family:    */
-/*  font-family: 'Roboto', sans-serif; */
+.top-ribbon {
+    width: 375px;
+    height: 80px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    margin-bottom: 26px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px dashed blue;
+}
+.top-ribbon img {
+    width: 75px;
+    height: 53px;
+}
+
+.main-chat {
+    width: 375px;
+    margin-top: 110px;
+    border: 1px solid green;
+}
+
+.bottom-ribbon {
+    width: 375px;
+    height: 80px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px dashed blue;
+}
