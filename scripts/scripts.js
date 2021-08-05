@@ -3,13 +3,28 @@ const POST_KEEPALIVE_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v3/u
 const GET_MESSAGES_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/messages";
 const POST_MESSAGES_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/messages";
 
+//---------------------------------------------------------
+
+let user = {
+    name: ""
+};
+
+//---------------------------------------------------------
+userCheckIn();
+
 function userCheckIn() {
-    const user = {
-        name: "Pixels_The_Dog"
-    };
-    const checkInPromise = axios.post(POST_LOGIN_URL, user);
-    console.log("checkin: ");
-    checkInPromise.then(console.log);
+    do {        
+        user.name = prompt("Olar! Informe-nos o seu lindo nome: ");
+        if (user.name.length < 3) {
+            alert("Seu nome deve conter ao menos 3 caracteres. Tente Novamente.");
+        }
+        let checkInPromise = axios.post(POST_LOGIN_URL, user);
+    } while (user.name === "");
+
+    /*
+        console.log("checkin: ");
+        checkInPromise.then(validateUserName);
+    */
 }
 
 function getAllMessages() {
