@@ -23,26 +23,36 @@
         </div>
 
         <div class="main-chat">
-            conversas <br>
+            <ul>
+                <!-- chat messages go here -->
+                <li class="status"> (09:21:45)  João  entra na sala... </li>
+                <li class="message"> (09:22:28)  João para Todos:  Bom dia </li>
+                <li class="message"> (09:22:38)  Maria para João:  Oi João :) </li>
+                <li class="private_message"> (09:22:48)  João reservadamente para Maria:  Oi gatinha quer tc? </li>
+                <li class="status"> (09:22:58)  Maria  sai da sala... </li>
 
+            </ul>
+            <!--
+            ícones:
             <ion-icon name="person-circle"></ion-icon>
             <ion-icon name="checkmark-sharp"></ion-icon>
             <ion-icon name="lock-open"></ion-icon>
             <ion-icon name="lock-open"></ion-icon>
+            -->
+
         </div>
 
         <div class="bottom-ribbon">
-            <p>Escreva aqui...</p>
+            <p onclick="writeMessage()"> Escreva aqui...</p>
             <ion-icon name="paper-plane-outline"></ion-icon>
 
         </div>
 
 
 
-
-
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+        <script src="scripts/scripts.js"></script>
 
 
 
