@@ -1,11 +1,11 @@
-const POST_LOGIN_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/participants";
-const POST_KEEPALIVE_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/status";
-const GET_MESSAGES_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/messages";
-const POST_MESSAGES_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/messages";
+const LOGIN_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/participants";
+const KEEPALIVE_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/status";
+const MESSAGES_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/messages";
+
 
 //---------------------------------------------------------
 
-let user = {
+let globalUser = {
     name: ""
 };
 
@@ -13,16 +13,16 @@ let user = {
 
 function askUserName() {
     do {
-        user.name = prompt("Olar! Informe-nos o seu lindo nome: ");
-        if (user.name === null) {
-            user.name = "";
+        globalUser.name = prompt("Olar! Informe-nos o seu lindo nome: ");
+        if (globalUser.name === null) {
+            globalUser.name = "";
         }
-        if (user.name.length < 3) {
+        if (globalUser.name.length < 3) {
             alert("Seu nome deve conter ao menos 3 caracteres. Tente Novamente.");
         }
-    } while ((user.name.length < 3 ));
+    } while ((globalUser.name.length < 3 ));
 
-    let checkInPromise = axios.post(POST_LOGIN_URL, user);
+    let checkInPromise = axios.post(LOGIN_URL, globalUser);
     checkInPromise.then(isNameValid);
     checkInPromise.catch(logInError);
     console.log("end of askUserName()");
@@ -30,6 +30,7 @@ function askUserName() {
 
 function isNameValid(serverResponse) {
     console.log("serverResponse: ", serverResponse, "\n end of then");
+    //setInterval(keepAlive, 4900);
 
 }
 
@@ -43,20 +44,51 @@ function logInError(serverError) {
     console.log("end of catch")
 }
 
+let getMessagesEnabled;
+function enableChatRefresh() {
+    getMessagesEnabled = setInterval(getAllMessages, 3000);
+    console.log(getMessagesEnabled);
+}
 
-
+function disableChatRefresh() {
+    console.log("disable id= " + getMessagesEnabled);
+    clearInterval(Number(getMessagesEnabled));
+}
 
 function getAllMessages() {
-    const getMessagesPromise = axios.get(GET_MESSAGES_URL);
-    console.log("getMessages: ");
+    const getMessagesPromise = axios.get(MESSAGES_URL);
+    console.log("fetching messages, timer id = " + getMessagesEnabled);
+    console.log("gettingMessages: ");
     getMessagesPromise.then(console.log);
     getMessagesPromise.then(printMessages);
-}9
+}
 
 function printMessages(messages) {
-    //console.log("got messages");
+    console.log("got messages");
     let mainChat = document.querySelector(".main-chat");
-    for (i = 0; i < 100; i++) {
+    mainChat.innerHTML = "";
+    for (i = 0; i < messages.data.length; i++) {
         mainChat.innerHTML += `<li> ${messages.data[i].time} ${messages.data[i].from} ${messages.data[i].text} </li>`;
     }
+    mainChat.scrollIntoView();
+}
+
+
+function keepAlive() {
+    const userObject = globalUser;
+    const keepAlivePromise = axios.post(KEEPALIVE_URL, userObject)
+    console.log("called keepAlive, globalUser: ", globalUser.name);
+
+    keepAlivePromise.then(userIsActive);
+    keepAlivePromise.catch(userIsOffline);
+    console.log("end of keepAlive()");
+}
+
+function userIsActive(serverResponse) {
+    console.log("stillAlive: ", serverResponse, "\n end of then");
+}
+
+function userIsOffline(serverError) {
+    console.log("keepAliveError: ", serverError.response, "\nend of catch");
+    alert("Disconnected due to inactivity");
 }
