@@ -10,22 +10,39 @@ let user = {
 };
 
 //---------------------------------------------------------
-userCheckIn();
 
-function userCheckIn() {
-    do {        
+function askUserName() {
+    do {
         user.name = prompt("Olar! Informe-nos o seu lindo nome: ");
         if (user.name.length < 3) {
             alert("Seu nome deve conter ao menos 3 caracteres. Tente Novamente.");
         }
-        let checkInPromise = axios.post(POST_LOGIN_URL, user);
-    } while (user.name === "");
+    } while (user.name.length < 3);
 
-    /*
-        console.log("checkin: ");
-        checkInPromise.then(validateUserName);
-    */
+    let checkInPromise = axios.post(POST_LOGIN_URL, user);
+    checkInPromise.then(isNameValid);
+    checkInPromise.catch(logInError);
+
+    console.log("end of askUserName()");
 }
+
+function isNameValid(serverResponse) {
+    console.log("serverResponse: ", serverResponse, "\n end of then");
+
+}
+
+function logInError(serverError) {
+    console.log("serverError.status: ", serverError.response.status);
+    if (serverError.response.status === 400) {
+        alert("Já existe alguém logado com este nome, escolha outro:")
+        askUserName();
+        console.log("saida IF catch");
+    }
+    console.log("end of catch")
+}
+
+
+
 
 function getAllMessages() {
     const getMessagesPromise = axios.get(GET_MESSAGES_URL);

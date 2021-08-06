@@ -16,7 +16,7 @@
         <title>Bate-Papo UOL</title>
     </head>
 
-    <body>
+    <body onload="askUserName()">
         <div class="top-ribbon">
             <img src="images/logo_uol_chat.png" alt="service-logo" />
             <ion-icon name="people"></ion-icon>
@@ -49,7 +49,7 @@
 
 
         <div class="bottom-ribbon">
-            <input type="text" value="Escreva aqui..." onclick="userCheckIn()">
+            <input type="text" value="Escreva aqui..." onclick="askUserName()">
             <ion-icon name="paper-plane-outline" onclick="getAllMessages()"></ion-icon>
 
         </div>
