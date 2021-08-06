@@ -14,15 +14,17 @@ let user = {
 function askUserName() {
     do {
         user.name = prompt("Olar! Informe-nos o seu lindo nome: ");
+        if (user.name === null) {
+            user.name = "";
+        }
         if (user.name.length < 3) {
             alert("Seu nome deve conter ao menos 3 caracteres. Tente Novamente.");
         }
-    } while (user.name.length < 3);
+    } while ((user.name.length < 3 ));
 
     let checkInPromise = axios.post(POST_LOGIN_URL, user);
     checkInPromise.then(isNameValid);
     checkInPromise.catch(logInError);
-
     console.log("end of askUserName()");
 }
 
@@ -34,7 +36,7 @@ function isNameValid(serverResponse) {
 function logInError(serverError) {
     console.log("serverError.status: ", serverError.response.status);
     if (serverError.response.status === 400) {
-        alert("Já existe alguém logado com este nome, escolha outro:")
+        alert("Nome inválido ou já em uso na sala. Escolha outro nome.")
         askUserName();
         console.log("saida IF catch");
     }
@@ -49,7 +51,7 @@ function getAllMessages() {
     console.log("getMessages: ");
     getMessagesPromise.then(console.log);
     getMessagesPromise.then(printMessages);
-}
+}9
 
 function printMessages(messages) {
     //console.log("got messages");
