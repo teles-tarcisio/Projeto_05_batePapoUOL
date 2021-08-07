@@ -41,20 +41,20 @@
             -->
 
         </div>
-        
-        <!-- <form class="message-form" onsubmit="return false;">
-            <input class="message-form__input" placeholder="Type a message.." type="text" />
-            <input class="message-form__button" value="Send" type="submit" />
-        </form> -->
+
+
 
 
         <div class="bottom-ribbon">
-            <input type="text" value="askUserName()" onclick="askUserName()">
-            <input type="text" value="keepAlive()" onclick="keepAlive()">
-            <input type="text" value="enableChatRefresh()" onclick="enableChatRefresh()">
-            <input type="text" value="disableChatRefresh()" onclick="disableChatRefresh()">
+            
+            <input type="text" value="Escreva aqui..." />
 
-            <ion-icon name="paper-plane-outline"></ion-icon>
+            <!-- <form class="message-box" onsubmit="console.log('clickedSend', this)" >
+                <input class="message-form__input" placeholder="Escreva aqui..." type="text" />
+                <input class="message-form__button" value="Send" type="submit" />
+            </form> -->
+
+            <ion-icon name="paper-plane-outline" onclick="sendMessage(this)"></ion-icon>
 
         </div>
 
@@ -65,7 +65,7 @@
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="scripts/scripts.js"></script>
 
-        
+
 
 
 

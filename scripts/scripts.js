@@ -3,13 +3,18 @@ const KEEPALIVE_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/st
 const MESSAGES_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/messages";
 
 
-//---------------------------------------------------------
+//---------------------------------------------------------globalVars
 
 let globalUser = {
     name: ""
 };
 
-//---------------------------------------------------------
+
+let keepAliveTimerID;
+let chatRefreshTimerID;
+
+
+//---------------------------------------------------------userLogin
 
 function askUserName() {
     do {
@@ -25,70 +30,96 @@ function askUserName() {
     let checkInPromise = axios.post(LOGIN_URL, globalUser);
     checkInPromise.then(isNameValid);
     checkInPromise.catch(logInError);
-    console.log("end of askUserName()");
 }
 
 function isNameValid(serverResponse) {
-    console.log("serverResponse: ", serverResponse, "\n end of then");
-    //setInterval(keepAlive, 4900);
-
+    console.log("user.name is valid", serverResponse);
+    keepAliveTimerID = setInterval(enableKeepAlive, 5000);
+    chatRefreshTimerID = setInterval(enableChatRefresh, 3000);
 }
 
 function logInError(serverError) {
-    console.log("serverError.status: ", serverError.response.status);
+    console.log("loginError: serverError.status: ", serverError.response.status);
     if (serverError.response.status === 400) {
-        alert("Nome inválido ou já em uso na sala. Escolha outro nome.")
+        alert(`${globalUser.name} - Nome inválido ou já em uso na sala. Escolha outro nome.`);
         askUserName();
-        console.log("saida IF catch");
     }
-    console.log("end of catch")
 }
 
-let getMessagesEnabled;
+//---------------------------------------------------------chatRefresh
+
 function enableChatRefresh() {
-    getMessagesEnabled = setInterval(getAllMessages, 3000);
-    console.log(getMessagesEnabled);
-}
-
-function disableChatRefresh() {
-    console.log("disable id= " + getMessagesEnabled);
-    clearInterval(Number(getMessagesEnabled));
-}
-
-function getAllMessages() {
+    console.log("gettingMessages...");
+    
     const getMessagesPromise = axios.get(MESSAGES_URL);
-    console.log("fetching messages, timer id = " + getMessagesEnabled);
-    console.log("gettingMessages: ");
     getMessagesPromise.then(console.log);
     getMessagesPromise.then(printMessages);
+    
+    //getMessagesPromise.catch ??????
 }
 
+
 function printMessages(messages) {
-    console.log("got messages");
     let mainChat = document.querySelector(".main-chat");
     mainChat.innerHTML = "";
     for (i = 0; i < messages.data.length; i++) {
         mainChat.innerHTML += `<li> ${messages.data[i].time} ${messages.data[i].from} ${messages.data[i].text} </li>`;
     }
+
+
     mainChat.scrollIntoView();
+    console.log("messages printed in chat.", "  enableChat_timerID= " + chatRefreshTimerID);
+}
+
+/*
+function clickedSend(submitted) {
+    console.log("clickedSend: ", submitted);
+}
+*/
+
+function sendMessage(element) {
+    let textToSend = element.parentElement.querySelector("input").value;
+    console.log(textToSend);
+    
+    let testUser = {
+        from: globalUser.name,
+        to: "Todos",
+        text: textToSend,
+        type: "message" // ou "private_message" para o bônus
+    }
+    
+    const sendMessagePromise = axios.post(MESSAGES_URL, testUser);
+    sendMessagePromise.then(sentMessageSuccess);
+    sendMessagePromise.catch(sentMessageFailed);
 }
 
 
-function keepAlive() {
-    const userObject = globalUser;
-    const keepAlivePromise = axios.post(KEEPALIVE_URL, userObject)
-    console.log("called keepAlive, globalUser: ", globalUser.name);
+function sentMessageSuccess(serverResponse) {
+    console.log("message sent succesfully", serverResponse);
+}
 
+function sentMessageFailed(serverError) {
+    console.log("cannot send empty message", serverError);
+}
+
+
+
+
+
+
+
+//---------------------------------------------------------keepAlive
+function enableKeepAlive() {
+    const keepAlivePromise = axios.post(KEEPALIVE_URL, globalUser)
     keepAlivePromise.then(userIsActive);
     keepAlivePromise.catch(userIsOffline);
-    console.log("end of keepAlive()");
 }
 
 function userIsActive(serverResponse) {
-    console.log("stillAlive: ", serverResponse, "\n end of then");
+    console.log("userStillAlive, timerID= ", keepAliveTimerID, serverResponse);
 }
 
 function userIsOffline(serverError) {
-    console.log("keepAliveError: ", serverError.response, "\nend of catch");
-    alert("Disconnected due to inactivity");
+    alert("keepAliveError: user disconnected due to inactivity");
+    //window.location.reload(); <<< working fine!
 }
