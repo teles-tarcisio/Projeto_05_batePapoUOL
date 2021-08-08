@@ -71,6 +71,9 @@ function printMessages(messages) {
     console.log("messages printed in chat.", "  enableChat_timerID= " + chatRefreshTimerID);
 }
 
+
+
+//---------------------------------------------------------sendingMessages
 /*
 function clickedSend(submitted) {
     console.log("clickedSend: ", submitted);
@@ -122,4 +125,20 @@ function userIsActive(serverResponse) {
 function userIsOffline(serverError) {
     alert("keepAliveError: user disconnected due to inactivity");
     //window.location.reload(); <<< working fine!
+}
+
+
+function getParticipants() {
+    const participantsPromise = axios.get(LOGIN_URL);
+
+    participantsPromise.then(printAllPeople);
+    participantsPromise.catch(errorGettingPeople)
+}
+
+function printAllPeople(serverResponse) {
+    console.log("online:", serverResponse.data);
+}
+
+function errorGettingPeople(serverError) {
+    console.log("failed to get people", serverError);
 }
