@@ -14,6 +14,7 @@ let keepAliveTimerID;
 let chatRefreshTimerID;
 
 
+
 //---------------------------------------------------------userLogin
 
 function askUserName() {
@@ -59,11 +60,18 @@ function enableChatRefresh() {
 }
 
 
-function printMessages(messages) {
+function printMessages(response) {
     let mainChat = document.querySelector(".main-chat");
     mainChat.innerHTML = "";
-    for (i = 0; i < messages.data.length; i++) {
-        mainChat.innerHTML += `<li> ${messages.data[i].time} ${messages.data[i].from} ${messages.data[i].text} </li>`;
+    for (i = 0; i < response.data.length; i++) {
+        //testar 'reservadamente' bem aqui!
+        mainChat.innerHTML += `<li class="${response.data[i].type}">
+        <p1>(${response.data[i].time})</p1>
+        <p2> ${response.data[i].from} </p2>
+        <p3>para</p3>
+        <p2> ${response.data[i].to} </p2>
+        <p3> ${response.data[i].text} </p3>
+        </li>`;
     }
 
 
@@ -136,9 +144,9 @@ function getParticipants() {
 }
 
 function printAllPeople(serverResponse) {
-    console.log("online:", serverResponse.data);
+    console.log("users online:", serverResponse.data);
 }
 
 function errorGettingPeople(serverError) {
-    console.log("failed to get people", serverError);
+    console.log("failed to get online users", serverError);
 }

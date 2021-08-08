@@ -56,6 +56,12 @@ body {
 
 li {
     margin: 0 auto 0 500px;
+    font-size: 14px;
+    line-height: 16px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    word-wrap: normal;
 }
 
 li.status {
@@ -68,6 +74,15 @@ li.message {
 
 li.private_message {
     background-color: #ffdede;
+}
+
+li p1 {
+    font-weight: 400;
+    color: #aaaaaa;
+}
+
+li p2 {
+    font-weight: 700;
 }
 
 
