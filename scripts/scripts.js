@@ -64,17 +64,24 @@ function printMessages(response) {
     let mainChat = document.querySelector(".main-chat");
     mainChat.innerHTML = "";
     for (i = 0; i < response.data.length; i++) {
-        //testar 'reservadamente' bem aqui!
-        mainChat.innerHTML += `<li class="${response.data[i].type}">
-        <p1>(${response.data[i].time})</p1>
-        <p2> ${response.data[i].from} </p2>
-        <p3>para</p3>
-        <p2> ${response.data[i].to} </p2>
-        <p3> ${response.data[i].text} </p3>
-        </li>`;
+        if (response.data[i].type === "status") {
+            mainChat.innerHTML += `<li class="${response.data[i].type}">
+            <p1> (${response.data[i].time}) &nbsp </p1>
+            <p2> ${response.data[i].from} &nbsp </p2>
+            <p3> ${response.data[i].text} </p3>
+            </li>`;
+            
+        }
+        else {
+            mainChat.innerHTML += `<li class="${response.data[i].type}">
+            <p1> (${response.data[i].time}) &nbsp</p1>
+            <p2> ${response.data[i].from} &nbsp </p2>
+            <p3>para &nbsp</p3>
+            <p2> ${response.data[i].to} &nbsp </p2>
+            <p3> ${response.data[i].text} </p3>
+            </li>`;
+        }
     }
-
-
     mainChat.scrollIntoView();
     console.log("messages printed in chat.", "  enableChat_timerID= " + chatRefreshTimerID);
 }
@@ -116,9 +123,6 @@ function sentMessageFailed(serverError) {
 
 
 
-
-
-
 //---------------------------------------------------------keepAlive
 function enableKeepAlive() {
     const keepAlivePromise = axios.post(KEEPALIVE_URL, globalUser)
@@ -132,7 +136,7 @@ function userIsActive(serverResponse) {
 
 function userIsOffline(serverError) {
     alert("keepAliveError: user disconnected due to inactivity");
-    //window.location.reload(); <<< working fine!
+    window.location.reload();
 }
 
 
