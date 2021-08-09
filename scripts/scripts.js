@@ -62,23 +62,14 @@ function printMessages(response) {
     let mainChat = document.querySelector(".main-chat");
     mainChat.innerHTML = "";
     for (i = 0; i < response.data.length; i++) {
-        if (response.data[i].type === "status") {
-            mainChat.innerHTML += `<li class="${response.data[i].type}">
-            <p1> (${response.data[i].time}) &nbsp </p1>
-            <p2> ${response.data[i].from} &nbsp </p2>
-            <p3> ${response.data[i].text} </p3>
-            </li>`;
-            
-        }
-        else {
-            mainChat.innerHTML += `<li class="${response.data[i].type}">
-            <p1> (${response.data[i].time}) &nbsp</p1>
-            <p2> ${response.data[i].from} &nbsp </p2>
-            <p3>para &nbsp</p3>
-            <p2> ${response.data[i].to} &nbsp </p2>
-            <p3> ${response.data[i].text} </p3>
-            </li>`;
-        }
+        mainChat.innerHTML += `<li class="${response.data[i].type}">
+        <p1>
+            <span class="timestamp">(${response.data[i].time}) </span>
+            <span class="from">${response.data[i].from}</span> para
+            <span class="to">${response.data[i].to}</span>:
+            ${response.data[i].text}
+        </p1>
+        </li>`;
     }
     mainChat.scrollIntoView();
     console.log("messages printed in chat.", "  enableChat_timerID= " + chatRefreshTimerID);
@@ -108,7 +99,6 @@ function sendMessage(element) {
     sendMessagePromise.then(sentMessageSuccess);
     sendMessagePromise.catch(sentMessageFailed);
     element.parentElement.querySelector(".message-form").reset();
-    return false;
 }
 
 
