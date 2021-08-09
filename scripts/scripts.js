@@ -30,13 +30,11 @@ function askUserName() {
 }
 
 function isNameValid(serverResponse) {
-    console.log("user.name is valid", serverResponse);
     keepAliveTimerID = setInterval(enableKeepAlive, 5000);
     chatRefreshTimerID = setInterval(enableChatRefresh, 3000);
 }
 
 function logInError(serverError) {
-    console.log("loginError: serverError.status: ", serverError.response.status);
     if (serverError.response.status === 400) {
         alert(`${globalUser.name} - Nome inválido ou já em uso na sala. Escolha outro nome.`);
         askUserName();
@@ -46,13 +44,8 @@ function logInError(serverError) {
 //---------------------------------------------------------chatRefresh
 
 function enableChatRefresh() {
-    console.log("gettingMessages...");
-    
     const getMessagesPromise = axios.get(MESSAGES_URL);
-    getMessagesPromise.then(console.log);
     getMessagesPromise.then(printMessages);
-    
-    //getMessagesPromise.catch ??????
 }
 
 
@@ -60,8 +53,9 @@ function printMessages(response) {
     let mainChat = document.querySelector(".main-chat");
     mainChat.innerHTML = "";
     for (i = 0; i < response.data.length; i++) {
-        if ((response.data[i].to !== globalUser.name) ||(response.data[i].to !== "Todos")){
+        if ((response.data[i].to !== globalUser.name) && (response.data[i].type === "private_message")){
             mainChat.innerHTML += "";
+            i++;
         }
         if (response.data[i].type === "status") {
             mainChat.innerHTML += `<li class="${response.data[i].type}">
@@ -72,7 +66,7 @@ function printMessages(response) {
             </p1>
             </li>`;
         }
-        else if (response.data[i].type === "private_message") {
+        else if ((response.data[i].type === "private_message") && (response.data[i].to === globalUser.name)) {
             mainChat.innerHTML += `<li class="${response.data[i].type}">
             <p1>
             <span class="timestamp">(${response.data[i].time}) </span>
@@ -94,22 +88,15 @@ function printMessages(response) {
         }
     }
     mainChat.scrollIntoView();
-    console.log("messages printed in chat.", "  enableChat_timerID= " + chatRefreshTimerID);
 }
 
 
 
 //---------------------------------------------------------sendingMessages
-/*
-function clickedSend(submitted) {
-    console.log("clickedSend: ", submitted);
-}
-*/
 
 function sendMessage(element) {
     let textToSend = element.parentElement.querySelector(".message-form input").value;
-    console.log(textToSend);
-    
+        
     let testUser = {
         from: globalUser.name,
         to: "Todos",
@@ -126,16 +113,11 @@ function sendMessage(element) {
 
 function sentMessageSuccess(serverResponse) {
     console.log("message sent succesfully", serverResponse);
-    //refresh chat messages
 }
 
 function sentMessageFailed(serverError) {
-    console.log("cannot send empty message", serverError);
-    //user offline, reload whole page
+    console.log("cannot send empty message");
 }
-
-
-
 
 //---------------------------------------------------------keepAlive
 function enableKeepAlive() {
@@ -153,10 +135,9 @@ function userIsOffline(serverError) {
     window.location.reload();
 }
 
-
+//---------------------------------------------------------usersOnline
 function getParticipants() {
     const participantsPromise = axios.get(LOGIN_URL);
-
     participantsPromise.then(printAllUsers);
     participantsPromise.catch(errorGettingUsers)
 }

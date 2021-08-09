@@ -73,6 +73,7 @@ body {
 .main-chat li p1 {
     font-size: 14px;
     font-weight: 400;
+    max-width: 100%;
     word-wrap: break-word;
 }
 
@@ -81,6 +82,7 @@ body {
 }
 
 .main-chat .from, .to {
+    max-width: 100%;
     font-weight: 700;
 }
 
