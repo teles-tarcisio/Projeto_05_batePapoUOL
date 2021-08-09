@@ -114,10 +114,12 @@ function sendMessage(element) {
 
 function sentMessageSuccess(serverResponse) {
     console.log("message sent succesfully", serverResponse);
+    //refresh chat messages
 }
 
 function sentMessageFailed(serverError) {
     console.log("cannot send empty message", serverError);
+    //user offline, reload whole page
 }
 
 
@@ -143,14 +145,14 @@ function userIsOffline(serverError) {
 function getParticipants() {
     const participantsPromise = axios.get(LOGIN_URL);
 
-    participantsPromise.then(printAllPeople);
-    participantsPromise.catch(errorGettingPeople)
+    participantsPromise.then(printAllUsers);
+    participantsPromise.catch(errorGettingUsers)
 }
 
-function printAllPeople(serverResponse) {
+function printAllUsers(serverResponse) {
     console.log("users online:", serverResponse.data);
 }
 
-function errorGettingPeople(serverError) {
+function errorGettingUsers(serverError) {
     console.log("failed to get online users", serverError);
 }
