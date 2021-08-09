@@ -62,14 +62,25 @@ function printMessages(response) {
     let mainChat = document.querySelector(".main-chat");
     mainChat.innerHTML = "";
     for (i = 0; i < response.data.length; i++) {
-        mainChat.innerHTML += `<li class="${response.data[i].type}">
-        <p1>
+        if (response.data[i].type === "status") {
+            mainChat.innerHTML += `<li class="${response.data[i].type}">
+            <p1>
+            <span class="timestamp">(${response.data[i].time})</span>
+            <span class="from">${response.data[i].from}</span>
+            ${response.data[i].text}
+            </p1>
+            </li>`;
+        }
+        else {
+            mainChat.innerHTML += `<li class="${response.data[i].type}">
+            <p1>
             <span class="timestamp">(${response.data[i].time}) </span>
             <span class="from">${response.data[i].from}</span> para
             <span class="to">${response.data[i].to}</span>:
             ${response.data[i].text}
-        </p1>
-        </li>`;
+            </p1>
+            </li>`;
+        }
     }
     mainChat.scrollIntoView();
     console.log("messages printed in chat.", "  enableChat_timerID= " + chatRefreshTimerID);
