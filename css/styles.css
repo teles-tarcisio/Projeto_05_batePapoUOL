@@ -47,12 +47,14 @@ body {
     min-height: 40px;
     border-radius: 2px;
     margin: 2px auto 2px 0;
+    padding: 1px;  
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
     font-size: 14px;
     line-height: 16px;
+    overflow-wrap: break-word;
     word-wrap: break-word;
 }
 

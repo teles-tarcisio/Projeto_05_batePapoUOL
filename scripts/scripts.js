@@ -2,13 +2,11 @@ const LOGIN_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/partic
 const KEEPALIVE_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/status";
 const MESSAGES_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/messages";
 
-
 //---------------------------------------------------------globalVars
 
 let globalUser = {
     name: ""
 };
-
 
 let keepAliveTimerID;
 let chatRefreshTimerID;
@@ -62,6 +60,9 @@ function printMessages(response) {
     let mainChat = document.querySelector(".main-chat");
     mainChat.innerHTML = "";
     for (i = 0; i < response.data.length; i++) {
+        if ((response.data[i].to !== globalUser.name) ||(response.data[i].to !== "Todos")){
+            mainChat.innerHTML += "";
+        }
         if (response.data[i].type === "status") {
             mainChat.innerHTML += `<li class="${response.data[i].type}">
             <p1>
@@ -70,6 +71,16 @@ function printMessages(response) {
             ${response.data[i].text}
             </p1>
             </li>`;
+        }
+        else if (response.data[i].type === "private_message") {
+            mainChat.innerHTML += `<li class="${response.data[i].type}">
+            <p1>
+            <span class="timestamp">(${response.data[i].time}) </span>
+            <span class="from">${response.data[i].from}</span> reservadamente para
+            <span class="to">${response.data[i].to}</span>:
+            ${response.data[i].text}
+            </p1>
+            </li>`;            
         }
         else {
             mainChat.innerHTML += `<li class="${response.data[i].type}">
