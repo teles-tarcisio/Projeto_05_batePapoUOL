@@ -13,8 +13,6 @@ let globalUser = {
 let keepAliveTimerID;
 let chatRefreshTimerID;
 
-
-
 //---------------------------------------------------------userLogin
 
 function askUserName() {
@@ -96,7 +94,7 @@ function clickedSend(submitted) {
 */
 
 function sendMessage(element) {
-    let textToSend = element.parentElement.querySelector("input").value;
+    let textToSend = element.parentElement.querySelector(".message-form input").value;
     console.log(textToSend);
     
     let testUser = {
@@ -109,6 +107,8 @@ function sendMessage(element) {
     const sendMessagePromise = axios.post(MESSAGES_URL, testUser);
     sendMessagePromise.then(sentMessageSuccess);
     sendMessagePromise.catch(sentMessageFailed);
+    element.parentElement.querySelector(".message-form").reset();
+    return false;
 }
 
 
@@ -150,7 +150,10 @@ function getParticipants() {
 }
 
 function printAllUsers(serverResponse) {
-    console.log("users online:", serverResponse.data);
+    console.log("users online:"); 
+    for (i = 0; i < serverResponse.data.length; i++) {
+        console.log(serverResponse.data[i].name);
+    }
 }
 
 function errorGettingUsers(serverError) {
