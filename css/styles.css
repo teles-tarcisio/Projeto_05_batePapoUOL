@@ -1,13 +1,14 @@
 * {
     box-sizing: border-box;
-    /*  CSS rule to use font family:    */
     font-family: 'Roboto', sans-serif;    
 }
 
 body {
     background-color: #e5e5e5;
 }
+
 /*-------------------------------------------------------*/
+
 .top-ribbon {
     width: 375px;
     height: 80px;
@@ -25,13 +26,13 @@ body {
     height: 53px;
     margin: 16px auto 11px 22px;
 }
-
 .top-ribbon ion-icon {
     width: 45px;
     height: 45px;
     margin: 18px 21px 17px auto;
 }
 /*-------------------------------------------------------*/
+
 .main-chat {
     width: 375px;
     height: 480px;
@@ -100,7 +101,6 @@ body {
     align-items: center;
     background-color: #ffffff;
     box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.05);
-    
 }
 
 .bottom-ribbon .message-form input {
@@ -108,7 +108,6 @@ body {
     font-size: 18px;
     border: none;
 }
-
 
 .bottom-ribbon ion-icon {
     width: 26px;

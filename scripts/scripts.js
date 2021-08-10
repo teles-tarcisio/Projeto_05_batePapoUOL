@@ -22,7 +22,7 @@ function askUserName() {
         if (globalUser.name.length < 3) {
             alert("Seu nome deve conter ao menos 3 caracteres. Tente Novamente.");
         }
-    } while ((globalUser.name.length < 3 ));
+    } while ((globalUser.name.length < 3));
 
     let checkInPromise = axios.post(LOGIN_URL, globalUser);
     checkInPromise.then(isNameValid);
@@ -46,13 +46,9 @@ function logInError(serverError) {
 //---------------------------------------------------------chatRefresh
 
 function enableChatRefresh() {
-    console.log("gettingMessages...");
-    
     const getMessagesPromise = axios.get(MESSAGES_URL);
-    getMessagesPromise.then(console.log);
     getMessagesPromise.then(printMessages);
-    
-    //getMessagesPromise.catch ??????
+    console.log("chatRefresh enabled, loading messages");
 }
 
 
@@ -60,114 +56,107 @@ function printMessages(response) {
     let mainChat = document.querySelector(".main-chat");
     mainChat.innerHTML = "";
     for (i = 0; i < response.data.length; i++) {
-        if ((response.data[i].to !== globalUser.name) ||(response.data[i].to !== "Todos")){
+        if ((response.data[i].type === "private_message") && ((response.data[i].to !== globalUser) || (response.data[i].to !== "Todos"))) {
             mainChat.innerHTML += "";
-        }
-        if (response.data[i].type === "status") {
-            mainChat.innerHTML += `<li class="${response.data[i].type}">
-            <p1>
-            <span class="timestamp">(${response.data[i].time})</span>
-            <span class="from">${response.data[i].from}</span>
-            ${response.data[i].text}
-            </p1>
-            </li>`;
-        }
-        else if (response.data[i].type === "private_message") {
-            mainChat.innerHTML += `<li class="${response.data[i].type}">
-            <p1>
-            <span class="timestamp">(${response.data[i].time}) </span>
-            <span class="from">${response.data[i].from}</span> reservadamente para
-            <span class="to">${response.data[i].to}</span>:
-            ${response.data[i].text}
-            </p1>
-            </li>`;            
+            i++;
         }
         else {
-            mainChat.innerHTML += `<li class="${response.data[i].type}">
-            <p1>
-            <span class="timestamp">(${response.data[i].time}) </span>
-            <span class="from">${response.data[i].from}</span> para
-            <span class="to">${response.data[i].to}</span>:
-            ${response.data[i].text}
-            </p1>
-            </li>`;
+            if (response.data[i].type === "status") {
+                mainChat.innerHTML += `<li class="${response.data[i].type}">
+                <p1>
+                <span class="timestamp">(${response.data[i].time})</span>
+                <span class="from">${response.data[i].from}</span>
+                ${response.data[i].text}
+                </p1>
+                </li>`;
+            }
+            else {
+                mainChat.innerHTML += `<li class="${response.data[i].type}">
+                <p1>
+                <span class="timestamp">(${response.data[i].time}) </span>
+                <span class="from">${response.data[i].from}</span> para
+                <span class="to">${response.data[i].to}</span>:
+                ${response.data[i].text}
+                </p1>
+                </li>`;
+            }
         }
     }
-    mainChat.scrollIntoView();
-    console.log("messages printed in chat.", "  enableChat_timerID= " + chatRefreshTimerID);
+        //mainChat.querySelector("li:last-child").scrollIntoView();
+        mainChat.scrollIntoView();
+        console.log("messages printed in chat.", "  enableChat_timerID= " + chatRefreshTimerID);
 }
 
 
-
-//---------------------------------------------------------sendingMessages
-/*
-function clickedSend(submitted) {
-    console.log("clickedSend: ", submitted);
-}
-*/
-
-function sendMessage(element) {
-    let textToSend = element.parentElement.querySelector(".message-form input").value;
-    console.log(textToSend);
-    
-    let testUser = {
-        from: globalUser.name,
-        to: "Todos",
-        text: textToSend,
-        type: "message" // ou "private_message" para o bônus
+    //---------------------------------------------------------sendingMessages
+    /*
+    function clickedSend(submitted) {
+        console.log("clickedSend: ", submitted);
     }
-    
-    const sendMessagePromise = axios.post(MESSAGES_URL, testUser);
-    sendMessagePromise.then(sentMessageSuccess);
-    sendMessagePromise.catch(sentMessageFailed);
-    element.parentElement.querySelector(".message-form").reset();
-}
+    */
 
+    function sendMessage(element) {
+        let textToSend = element.parentElement.querySelector(".message-form input").value;
+        console.log(textToSend);
 
-function sentMessageSuccess(serverResponse) {
-    console.log("message sent succesfully", serverResponse);
-    //refresh chat messages
-}
+        let testUser = {
+            from: globalUser.name,
+            to: "Todos",
+            text: textToSend,
+            type: "message" // ou "private_message" para o bônus
+        }
 
-function sentMessageFailed(serverError) {
-    console.log("cannot send empty message", serverError);
-    //user offline, reload whole page
-}
-
-
-
-
-//---------------------------------------------------------keepAlive
-function enableKeepAlive() {
-    const keepAlivePromise = axios.post(KEEPALIVE_URL, globalUser)
-    keepAlivePromise.then(userIsActive);
-    keepAlivePromise.catch(userIsOffline);
-}
-
-function userIsActive(serverResponse) {
-    console.log("userStillAlive, timerID= ", keepAliveTimerID, serverResponse);
-}
-
-function userIsOffline(serverError) {
-    alert("keepAliveError: user disconnected due to inactivity");
-    window.location.reload();
-}
-
-
-function getParticipants() {
-    const participantsPromise = axios.get(LOGIN_URL);
-
-    participantsPromise.then(printAllUsers);
-    participantsPromise.catch(errorGettingUsers)
-}
-
-function printAllUsers(serverResponse) {
-    console.log("users online:"); 
-    for (i = 0; i < serverResponse.data.length; i++) {
-        console.log(serverResponse.data[i].name);
+        const sendMessagePromise = axios.post(MESSAGES_URL, testUser);
+        sendMessagePromise.then(sentMessageSuccess);
+        sendMessagePromise.catch(sentMessageFailed);
+        element.parentElement.querySelector(".message-form").reset();
     }
-}
 
-function errorGettingUsers(serverError) {
-    console.log("failed to get online users", serverError);
-}
+
+    function sentMessageSuccess(serverResponse) {
+        console.log("message sent succesfully", serverResponse);
+        //refresh chat messages
+    }
+
+    function sentMessageFailed(serverError) {
+        console.log("cannot send empty message", serverError);
+        //user offline, reload whole page
+    }
+
+
+
+
+    //---------------------------------------------------------keepAlive
+    function enableKeepAlive() {
+        const keepAlivePromise = axios.post(KEEPALIVE_URL, globalUser)
+        keepAlivePromise.then(userIsActive);
+        keepAlivePromise.catch(userIsOffline);
+    }
+
+    function userIsActive(serverResponse) {
+        console.log("userStillAlive, timerID= ", keepAliveTimerID, serverResponse);
+    }
+
+    function userIsOffline(serverError) {
+        alert("keepAliveError: user disconnected due to inactivity");
+        window.location.reload();
+    }
+
+
+    function getParticipants() {
+        const participantsPromise = axios.get(LOGIN_URL);
+
+        participantsPromise.then(printAllUsers);
+        participantsPromise.catch(errorGettingUsers)
+    }
+
+    function printAllUsers(serverResponse) {
+        console.log("users online:");
+        for (i = 0; i < serverResponse.data.length; i++) {
+            console.log(serverResponse.data[i].name);
+        }
+    }
+
+    function errorGettingUsers(serverError) {
+        console.log("failed to get online users", serverError);
+    }
