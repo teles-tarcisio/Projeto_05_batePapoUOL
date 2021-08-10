@@ -69,6 +69,7 @@ body {
 
 .main-chat li.private_message {
     background-color: #ffdede;
+    border: 2px dashed red;
 }
 
 .main-chat li p1 {
@@ -103,7 +104,7 @@ body {
     box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.05);
 }
 
-.bottom-ribbon .message-form input {
+.bottom-ribbon input {
     margin: auto auto auto 17px;
     font-size: 18px;
     border: none;

@@ -82,81 +82,85 @@ function printMessages(response) {
             }
         }
     }
-        //mainChat.querySelector("li:last-child").scrollIntoView();
-        mainChat.scrollIntoView();
-        console.log("messages printed in chat.", "  enableChat_timerID= " + chatRefreshTimerID);
+    //mainChat.querySelector("li:last-child").scrollIntoView();
+    mainChat.scrollIntoView();
+    console.log("messages printed in chat.", "  enableChat_timerID= " + chatRefreshTimerID);
+    document.addEventListener("keyup", handleEnterKeyUp);
+}
+
+function handleEnterKeyUp(event) {
+    console.log(event);
+    if (event.key === "Enter") {
+        sendMessage();
+    }
 }
 
 
-    //---------------------------------------------------------sendingMessages
-    /*
-    function clickedSend(submitted) {
-        console.log("clickedSend: ", submitted);
-    }
-    */
 
-    function sendMessage(element) {
-        let textToSend = element.parentElement.querySelector(".message-form input").value;
-        console.log(textToSend);
+//---------------------------------------------------------sendingMessages
 
-        let testUser = {
-            from: globalUser.name,
-            to: "Todos",
-            text: textToSend,
-            type: "message" // ou "private_message" para o bônus
-        }
+function sendMessage() {
+    let textToSend = document.querySelector(".bottom-ribbon input[type=text]").value;
+    console.log(textToSend);
 
-        const sendMessagePromise = axios.post(MESSAGES_URL, testUser);
-        sendMessagePromise.then(sentMessageSuccess);
-        sendMessagePromise.catch(sentMessageFailed);
-        element.parentElement.querySelector(".message-form").reset();
+    let testUser = {
+        from: globalUser.name,
+        to: "Todos",
+        text: textToSend,
+        type: "message" // ou "private_message" para o bônus
     }
 
+    const sendMessagePromise = axios.post(MESSAGES_URL, testUser);
+    sendMessagePromise.then(sentMessageSuccess);
+    sendMessagePromise.catch(sentMessageFailed);
+    document.querySelector(".bottom-ribbon input[type=text]").value = "";
+}
 
-    function sentMessageSuccess(serverResponse) {
-        console.log("message sent succesfully", serverResponse);
-        //refresh chat messages
+
+function sentMessageSuccess(serverResponse) {
+    console.log("message sent succesfully", serverResponse);
+    //refresh chat messages
+}
+
+function sentMessageFailed(serverError) {
+    console.log("cannot send empty message", serverError);
+    //user offline, reload whole page
+}
+
+
+
+
+//---------------------------------------------------------keepAlive
+function enableKeepAlive() {
+    const keepAlivePromise = axios.post(KEEPALIVE_URL, globalUser)
+    keepAlivePromise.then(userIsActive);
+    keepAlivePromise.catch(userIsOffline);
+}
+
+function userIsActive(serverResponse) {
+    console.log("userStillAlive, timerID= ", keepAliveTimerID, serverResponse);
+}
+
+function userIsOffline(serverError) {
+    alert("keepAliveError: user disconnected due to inactivity");
+    window.location.reload();
+}
+
+
+function getParticipants() {
+    const participantsPromise = axios.get(LOGIN_URL);
+
+    participantsPromise.then(printAllUsers);
+    participantsPromise.catch(errorGettingUsers)
+}
+
+function printAllUsers(serverResponse) {
+    console.log("users online:");
+    for (i = 0; i < serverResponse.data.length; i++) {
+        console.log(serverResponse.data[i].name);
     }
+}
 
-    function sentMessageFailed(serverError) {
-        console.log("cannot send empty message", serverError);
-        //user offline, reload whole page
-    }
-
-
-
-
-    //---------------------------------------------------------keepAlive
-    function enableKeepAlive() {
-        const keepAlivePromise = axios.post(KEEPALIVE_URL, globalUser)
-        keepAlivePromise.then(userIsActive);
-        keepAlivePromise.catch(userIsOffline);
-    }
-
-    function userIsActive(serverResponse) {
-        console.log("userStillAlive, timerID= ", keepAliveTimerID, serverResponse);
-    }
-
-    function userIsOffline(serverError) {
-        alert("keepAliveError: user disconnected due to inactivity");
-        window.location.reload();
-    }
-
-
-    function getParticipants() {
-        const participantsPromise = axios.get(LOGIN_URL);
-
-        participantsPromise.then(printAllUsers);
-        participantsPromise.catch(errorGettingUsers)
-    }
-
-    function printAllUsers(serverResponse) {
-        console.log("users online:");
-        for (i = 0; i < serverResponse.data.length; i++) {
-            console.log(serverResponse.data[i].name);
-        }
-    }
-
-    function errorGettingUsers(serverError) {
-        console.log("failed to get online users", serverError);
-    }
+function errorGettingUsers(serverError) {
+    console.log("failed to get online users", serverError);
+}

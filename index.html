@@ -25,6 +25,48 @@
         <div class="main-chat">
             <ul>
                 <!-- chat messages go here -->
+                <li class="status">
+                    <p1>
+                    <span class="timestamp">(10:52:14)</span>
+                    <span class="from">João</span>
+                    entrou na sala....
+                    </p1>
+                </li>
+
+                <li class="message">
+                    <p1>
+                    <span class="timestamp">(11:04:12) </span>
+                    <span class="from">João</span> para
+                    <span class="to">Todos</span>:
+                    opa galera, blz?
+                    </p1>
+                </li>
+
+                <li class="message">
+                    <p1>
+                    <span class="timestamp">(11:06:12) </span>
+                    <span class="from">Maria</span> para
+                    <span class="to">Todos</span>:
+                    até agora, tava.
+                    </p1>
+                </li>
+
+                <li class="private_message">
+                    <p1>
+                    <span class="timestamp">(11:06:59) </span>
+                    <span class="from">João</span> reservadamente para
+                    <span class="to">Maria</span>:
+                    qual foi gata?
+                    </p1>
+                </li>
+
+                <li class="status">
+                    <p1>
+                    <span class="timestamp">(11:07:49) </span>
+                    <span class="from">Maria</span> saiu da sala.
+                    </p1>
+                </li>
+
             </ul>
 
             <!--
@@ -39,11 +81,21 @@
         </div>
 
         <div class="bottom-ribbon">      
-            <form class="message-form" onsubmit="return false;">
-                <input placeholder="Escreva aqui..." type="text" />
-            </form>
-            <ion-icon name="paper-plane-outline" onclick="sendMessage(this)"></ion-icon>            
+            <input placeholder="Escreva aqui..." type="text" />
+            <ion-icon name="paper-plane-outline" onclick="sendMessage()"></ion-icon>            
         </div>
+
+        <aside class="people-panel">
+            <ul class="online-users">
+
+            </ul>
+
+            <ul class="public-or-private">
+
+            </ul>
+
+
+        </aside>
 
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
