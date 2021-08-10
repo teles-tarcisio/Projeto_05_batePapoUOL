@@ -19,7 +19,7 @@
     <body onload="askUserName()">
         <div class="top-ribbon">
             <img src="images/logo_uol_chat.png" alt="service-logo" />
-            <ion-icon name="people"></ion-icon>
+            <ion-icon name="people" onclick="showSidePanel()"></ion-icon>
         </div>
 
         <div class="main-chat">
@@ -85,7 +85,7 @@
             <ion-icon name="paper-plane-outline" onclick="sendMessage()"></ion-icon>            
         </div>
 
-        <aside class="people-panel">
+        <aside class="side-panel hidden">
             <ul class="online-users">
 
             </ul>

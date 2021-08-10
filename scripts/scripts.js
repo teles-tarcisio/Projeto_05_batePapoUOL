@@ -89,7 +89,6 @@ function printMessages(response) {
 }
 
 function handleEnterKeyUp(event) {
-    console.log(event);
     if (event.key === "Enter") {
         sendMessage();
     }
@@ -162,4 +161,11 @@ function printAllUsers(serverResponse) {
 
 function errorGettingUsers(serverError) {
     console.log("failed to get online users", serverError);
+}
+
+//---------------------------------------------------------side-panel
+function showSidePanel() {
+    console.log("SIDEPANEL - print users");
+    
+    getParticipants();
 }
