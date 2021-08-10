@@ -96,7 +96,6 @@ function handleEnterKeyUp(event) {
 }
 
 
-
 //---------------------------------------------------------sendingMessages
 
 function sendMessage() {
